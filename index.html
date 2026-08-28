@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Yousef Sherif — Frontend Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0e14;
+    --panel: #10151d;
+    --panel-2: #141a23;
+    --line: #202834;
+    --text: #e9edf3;
+    --muted: #8b95a3;
+    --muted-2: #5c6675;
+    --cyan: #4fe0c4;
+    --cyan-dim: rgba(79,224,196,0.14);
+    --amber: #f3a559;
+    --amber-dim: rgba(243,165,89,0.14);
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'Inter', -apple-system, sans-serif;
+    --radius: 10px;
+    --maxw: 1120px;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body::before{
+    content:'';
+    position: fixed; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    opacity: 0.25;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 10%, transparent 70%);
+    z-index: 0;
+  }
+  a{ color: inherit; text-decoration: none; }
+  img{ max-width:100%; display:block; }
+  section{ position: relative; z-index: 1; }
+  .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+  ::selection{ background: var(--cyan); color: #06110e; }
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    color: var(--cyan);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .eyebrow::before{ content:'//'; color: var(--muted-2); }
+
+  /* ---------- status bar ---------- */
+  .statusbar{
+    background: #070a0f;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    position: relative;
+    z-index: 20;
+  }
+  .statusbar .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    gap: 20px; height: 34px; padding-top:0; padding-bottom:0;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .status-item{ display:flex; align-items:center; gap:7px; }
+  .status-dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--cyan);
+    box-shadow: 0 0 0 0 rgba(79,224,196,0.6);
+    animation: pulseDot 2s infinite;
+    flex-shrink:0;
+  }
+  @keyframes pulseDot{
+    0%{ box-shadow: 0 0 0 0 rgba(79,224,196,0.55); }
+    70%{ box-shadow: 0 0 0 6px rgba(79,224,196,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(79,224,196,0); }
+  }
+  .status-item .sep{ color: var(--line); }
+  #clock{ color: var(--text); }
+  .statusbar .status-item span.label{ color: var(--muted-2); }
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position: sticky; top:0; z-index: 30;
+    background: rgba(10,14,20,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav .wrap{ display:flex; align-items:center; justify-content:space-between; height: 64px; }
+  .logo{
+    font-family: var(--mono); font-weight:700; font-size:16px;
+    letter-spacing:0.02em;
+  }
+  .logo span{ color: var(--cyan); }
+  nav.links{ display:flex; gap: 32px; align-items:center; }
+  nav.links a{
+    font-size: 14px; color: var(--muted); font-weight:500;
+    position: relative; padding: 4px 0;
+    transition: color 0.2s ease;
+  }
+  nav.links a::after{
+    content:''; position:absolute; left:0; right:100%; bottom:-2px; height:1px;
+    background: var(--cyan); transition: right 0.25s ease;
+  }
+  nav.links a:hover{ color: var(--text); }
+  nav.links a:hover::after{ right:0; }
+  .nav-cta{
+    font-family: var(--mono); font-size:13px; font-weight:600;
+    color: var(--bg) !important; background: var(--cyan);
+    padding: 8px 16px; border-radius: 6px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .nav-cta:hover{ transform: translateY(-1px); box-shadow: 0 6px 18px rgba(79,224,196,0.25); }
+  .menu-btn{
+    display:none; background:none; border:1px solid var(--line); color: var(--text);
+    width:38px; height:38px; border-radius:6px; cursor:pointer;
+    align-items:center; justify-content:center;
+  }
+  .mobile-panel{
+    display:none; flex-direction: column; gap: 4px;
+    background: var(--panel); border-bottom: 1px solid var(--line);
+    padding: 10px 28px 18px;
+  }
+  .mobile-panel a{ padding: 12px 4px; font-size:15px; color: var(--muted); border-bottom: 1px solid var(--line); }
+  .mobile-panel a:last-child{ border-bottom:none; }
+
+  /* ---------- hero ---------- */
+  .hero{ padding: 96px 0 88px; }
+  .hero .wrap{
+    display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items:center;
+  }
+  .hero h1{
+    font-size: clamp(40px, 5.4vw, 62px);
+    font-weight: 800; letter-spacing: -0.02em; line-height:1.04;
+    margin-bottom: 18px;
+  }
+  .hero h1 .accent{ color: var(--cyan); }
+  .hero .role{
+    font-family: var(--mono); font-size: 15px; color: var(--amber);
+    margin-bottom: 22px; letter-spacing: 0.02em;
+  }
+  .hero p.lead{
+    font-size: 17px; color: var(--muted); max-width: 520px; margin-bottom: 34px;
+  }
+  .hero-ctas{ display:flex; gap: 14px; flex-wrap: wrap; }
+  .btn{
+    font-family: var(--sans); font-weight:600; font-size: 14.5px;
+    padding: 13px 24px; border-radius: 7px; display:inline-flex; align-items:center; gap:8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color .2s ease;
+    border: 1px solid transparent; cursor:pointer;
+  }
+  .btn-primary{ background: var(--cyan); color:#06110e; }
+  .btn-primary:hover{ transform: translateY(-2px); box-shadow: 0 10px 26px rgba(79,224,196,0.25); }
+  .btn-ghost{ border-color: var(--line); color: var(--text); }
+  .btn-ghost:hover{ border-color: var(--cyan); color: var(--cyan); transform: translateY(-2px); }
+
+  /* radar panel */
+  .radar-wrap{
+    aspect-ratio: 1/1; position:relative; border-radius: 16px;
+    background: radial-gradient(circle at 50% 50%, #0d1720 0%, #090c11 70%);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .radar-frame{
+    position:absolute; inset:14px; border:1px solid var(--line); border-radius:12px;
+  }
+  .radar-label{
+    position:absolute; top:16px; left:20px; font-family: var(--mono); font-size:11px;
+    color: var(--muted-2); letter-spacing: 0.1em; z-index: 3;
+  }
+  .radar-label b{ color: var(--cyan); font-weight:600; }
+  .radar-ring{
+    position:absolute; top:50%; left:50%; border:1px solid rgba(79,224,196,0.18);
+    border-radius:50%; transform: translate(-50%,-50%);
+  }
+  .radar-sweep{
+    position:absolute; top:50%; left:50%; width:50%; height:50%;
+    transform-origin: 0% 0%;
+    background: conic-gradient(from 0deg, rgba(79,224,196,0.35), transparent 32%);
+    animation: sweep 5s linear infinite;
+    border-radius: 0 100% 0 0;
+  }
+  @keyframes sweep{ to{ transform: rotate(360deg); } }
+  .radar-dot{
+    position:absolute; width:6px; height:6px; border-radius:50%; background: var(--amber);
+    box-shadow: 0 0 0 0 rgba(243,165,89,0.6);
+    animation: dotPulse 2.6s ease-in-out infinite;
+  }
+  .radar-dot.cy{ background: var(--cyan); box-shadow: 0 0 0 0 rgba(79,224,196,0.6); }
+  @keyframes dotPulse{
+    0%,100%{ box-shadow: 0 0 0 0 rgba(243,165,89,0.45); }
+    50%{ box-shadow: 0 0 0 8px rgba(243,165,89,0); }
+  }
+
+  /* ---------- section shells ---------- */
+  .section{ padding: 88px 0; border-top: 1px solid var(--line); }
+  .section h2{
+    font-size: clamp(26px, 3vw, 34px); font-weight:800; letter-spacing:-0.01em; margin-bottom: 18px;
+  }
+  .section-head{ max-width: 620px; margin-bottom: 48px; }
+  .section-head p{ color: var(--muted); font-size:15.5px; }
+
+  .reveal{ opacity:0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.is-visible{ opacity:1; transform: translateY(0); }
+
+  /* ---------- about ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items:start; }
+  .about-grid p{ color: var(--muted); font-size:15.5px; margin-bottom:16px; }
+  .about-grid p b{ color: var(--text); font-weight:600; }
+  .stat-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+  .stat-card{
+    background: var(--panel); border:1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; transition: border-color .2s ease, transform .2s ease;
+  }
+  .stat-card:hover{ border-color: rgba(79,224,196,0.4); transform: translateY(-3px); }
+  .stat-num{ font-family: var(--mono); font-size: 26px; font-weight:700; color: var(--cyan); }
+  .stat-label{ font-size:12.5px; color: var(--muted); margin-top:4px; }
+
+  /* ---------- experience ---------- */
+  .timeline{ border-left: 1px solid var(--line); padding-left: 32px; position:relative; }
+  .timeline::before{
+    content:''; position:absolute; left:-4.5px; top:6px; width:8px; height:8px; border-radius:50%;
+    background: var(--cyan); box-shadow: 0 0 0 4px var(--cyan-dim);
+  }
+  .job-head{ display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; align-items:baseline; margin-bottom:6px; }
+  .job-title{ font-size:19px; font-weight:700; }
+  .job-title .co{ color: var(--cyan); }
+  .job-time{ font-family: var(--mono); font-size:12.5px; color: var(--amber); }
+  .job-list{ list-style:none; margin-top:16px; display:flex; flex-direction:column; gap:12px; }
+  .job-list li{
+    display:flex; gap:12px; color: var(--muted); font-size:15px; align-items:flex-start;
+  }
+  .job-list li svg{ flex-shrink:0; margin-top:4px; color: var(--cyan); }
+
+  /* ---------- skills ---------- */
+  .skills-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
+  .skill-card{
+    background: var(--panel); border:1px solid var(--line); border-radius: var(--radius);
+    padding: 22px; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+  }
+  .skill-card:hover{ transform: translateY(-4px); border-color: rgba(79,224,196,0.35); box-shadow: 0 14px 30px rgba(0,0,0,0.35); }
+  .skill-icon{
+    width: 38px; height:38px; border-radius:8px; background: var(--cyan-dim); color: var(--cyan);
+    display:flex; align-items:center; justify-content:center; margin-bottom: 14px;
+  }
+  .skill-card h3{ font-size: 15.5px; margin-bottom: 10px; }
+  .tag-row{ display:flex; flex-wrap:wrap; gap:7px; }
+  .tag{
+    font-family: var(--mono); font-size:11.5px; color: var(--muted);
+    border:1px solid var(--line); padding: 4px 9px; border-radius: 5px;
+    transition: border-color .2s ease, color .2s ease;
+  }
+  .skill-card:hover .tag{ border-color: rgba(79,224,196,0.25); }
+
+  /* ---------- projects ---------- */
+  .project-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .project-card{
+    background: var(--panel); border:1px solid var(--line); border-radius: var(--radius);
+    padding: 24px; display:flex; flex-direction:column; gap:12px;
+    transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    cursor: pointer;
+  }
+  .project-card.no-link{ cursor: default; }
+  .project-card:hover{ transform: translateY(-4px); border-color: rgba(79,224,196,0.35); box-shadow: 0 16px 34px rgba(0,0,0,0.4); }
+  .project-card.no-link:hover{ border-color: var(--line); transform:none; box-shadow:none; }
+  .project-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+  .project-card h3{ font-size:17px; font-weight:700; }
+  .project-icon{ color: var(--muted-2); flex-shrink:0; transition: color .2s ease, transform .2s ease; }
+  .project-card:hover .project-icon{ color: var(--cyan); transform: translate(2px,-2px); }
+  .project-card p{ color: var(--muted); font-size:14px; flex:1; }
+  .project-live{
+    font-family: var(--mono); font-size:11px; color: var(--cyan);
+    display:flex; align-items:center; gap:6px; letter-spacing:0.03em;
+  }
+  .project-live .status-dot{ width:5px; height:5px; }
+
+  /* ---------- certificates ---------- */
+  .cert-list{ display:grid; grid-template-columns: repeat(2, 1fr); gap:14px; }
+  .cert-card{
+    display:flex; align-items:center; gap:14px;
+    background: var(--panel); border:1px solid var(--line); border-radius: var(--radius);
+    padding:18px; transition: border-color .2s ease, transform .2s ease;
+  }
+  .cert-card:hover{ border-color: rgba(243,165,89,0.4); transform: translateY(-2px); }
+  .cert-icon{
+    width:36px; height:36px; border-radius:8px; background: var(--amber-dim); color: var(--amber);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .cert-card .org{ font-weight:600; font-size:14.5px; }
+  .cert-card .course{ font-size:13px; color: var(--muted); }
+
+  /* ---------- contact / footer ---------- */
+  .contact-section{ text-align:center; }
+  .contact-section h2{ margin-bottom:14px; }
+  .contact-section > .wrap > p{ color: var(--muted); max-width:480px; margin: 0 auto 36px; font-size:15.5px; }
+  .contact-row{ display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-bottom: 56px; }
+  .contact-pill{
+    display:flex; align-items:center; gap:9px;
+    border:1px solid var(--line); border-radius: 30px; padding: 11px 20px;
+    font-size:14px; color: var(--text); transition: border-color .2s ease, transform .2s ease, color .2s ease;
+  }
+  .contact-pill:hover{ border-color: var(--cyan); color: var(--cyan); transform: translateY(-2px); }
+  footer{ border-top:1px solid var(--line); padding: 26px 0; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; }
+  footer p{ font-family: var(--mono); font-size:12px; color: var(--muted-2); }
+  .footer-socials{ display:flex; gap:16px; }
+  .footer-socials a{ color: var(--muted); transition: color .2s ease; }
+  .footer-socials a:hover{ color: var(--cyan); }
+
+  @media (max-width: 900px){
+    .hero .wrap{ grid-template-columns: 1fr; }
+    .radar-wrap{ max-width: 360px; margin: 0 auto; }
+    .about-grid{ grid-template-columns: 1fr; }
+    .skills-grid{ grid-template-columns: repeat(2, 1fr); }
+    .project-grid{ grid-template-columns: 1fr; }
+    .cert-list{ grid-template-columns: 1fr; }
+    nav.links{ display:none; }
+    .menu-btn{ display:flex; }
+  }
+  @media (max-width: 560px){
+    .skills-grid{ grid-template-columns: 1fr; }
+    .statusbar .wrap{ font-size: 10.5px; gap:14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+    .reveal{ opacity:1; transform:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="statusbar">
+  <div class="wrap">
+    <div class="status-item"><span class="status-dot"></span> OPEN TO OPPORTUNITIES</div>
+    <div class="status-item"><span class="sep">|</span><span class="label">STACK:</span> React · Node · MongoDB</div>
+    <div class="status-item"><span class="sep">|</span><span class="label">BASE:</span> Cairo, EG</div>
+    <div class="status-item"><span class="sep">|</span><span class="label">LOCAL:</span> <span id="clock">--:--:--</span></div>
+  </div>
+</div>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#top" class="logo">YS<span>.</span></a>
+    <nav class="links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#certificates">Certs</a>
+      <a href="#contact" class="nav-cta">Contact</a>
+    </nav>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-panel" id="mobilePanel">
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#certificates">Certs</a>
+    <a href="#contact">Contact</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">FRONTEND ENGINEER — MERN STACK</div>
+        <h1>Yousef <span class="accent">Sherif</span></h1>
+        <div class="role">Building interfaces that stay smooth under real-time load.</div>
+        <p class="lead">I build real-time, high-performance web apps — from live fleet-tracking dashboards to offline-first construction tools. Currently shipping product at UMA UK with React, WebSockets, and a lot of attention to what happens when a thousand data points update at once.</p>
+        <div class="hero-ctas">
+          <a href="#projects" class="btn btn-primary">
+            View Projects
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-ghost">Get in Touch</a>
+        </div>
+      </div>
+
+      <div class="radar-wrap reveal">
+        <div class="radar-label">LIVE TRACKING <b>· 4 UNITS</b></div>
+        <div class="radar-frame"></div>
+        <div class="radar-ring" style="width:30%; height:30%;"></div>
+        <div class="radar-ring" style="width:56%; height:56%;"></div>
+        <div class="radar-ring" style="width:82%; height:82%;"></div>
+        <div class="radar-sweep"></div>
+        <div class="radar-dot cy" style="top:32%; left:60%; animation-delay:0s;"></div>
+        <div class="radar-dot" style="top:64%; left:38%; animation-delay:.6s;"></div>
+        <div class="radar-dot cy" style="top:70%; left:66%; animation-delay:1.2s;"></div>
+        <div class="radar-dot" style="top:44%; left:28%; animation-delay:1.8s;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="eyebrow">About</div>
+          <h2>Interfaces built to hold up under real load</h2>
+          <p>I'm a <b>Frontend Engineer</b> with strong MERN stack experience, focused on building scalable, responsive, user-centric web applications. My work leans heavily on <b>React.js, TypeScript, and Redux Toolkit</b>, with a habit of digging into what makes an interface stay fast — caching, virtualization, and thoughtful state management.</p>
+          <p>At <b>UMA UK</b> I work on fleet-management and construction-workflow products: real-time WebSocket tracking, interactive geofencing, drag-and-drop form builders, and offline-first modules that keep working when the network doesn't.</p>
+          <p>I care about the full lifecycle — from requirements to deployment — and about shipping solutions that hold up in fast-paced, production environments.</p>
+        </div>
+        <div class="stat-grid reveal">
+          <div class="stat-card"><div class="stat-num">12+</div><div class="stat-label">Projects shipped</div></div>
+          <div class="stat-card"><div class="stat-num">4</div><div class="stat-label">Certifications earned</div></div>
+          <div class="stat-card"><div class="stat-num">6</div><div class="stat-label">Core specialties</div></div>
+          <div class="stat-card"><div class="stat-num">MERN</div><div class="stat-label">Primary stack</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Experience</div>
+        <h2>Where I've been building</h2>
+      </div>
+      <div class="timeline reveal">
+        <div class="job-head">
+          <div class="job-title">Frontend Engineer · <span class="co">UMA UK</span></div>
+          <div class="job-time">PRESENT</div>
+        </div>
+        <ul class="job-list">
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            Enhanced real-time tracking performance in a fleet management system by optimizing WebSocket data handling with throttling, preventing bottlenecks under simultaneous device updates.
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            Improved performance and UX in large data tables and tracking screens by implementing window virtualization for efficient scroll rendering.
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+            Reduced unnecessary API requests and improved data-fetching efficiency with caching strategies using Redux Toolkit Query (RTK Query).
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.94 11A8.94 8.94 0 1 0 12.06 20"/><path d="M12 6v6l4 2"/></svg>
+            Built an interactive geofence management feature with Leaflet, letting users draw and manage geofence coordinates across multiple layers.
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><path d="M10 6.5h4M6.5 10v4"/></svg>
+            Built a fully dynamic drag-and-drop form builder for construction workflows using DnD Kit, letting teams create custom forms per project.
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 9a15 15 0 0 1 22 0M5 13a10 10 0 0 1 14 0M8.5 17a5 5 0 0 1 7 0"/><line x1="12" y1="21" x2="12.01" y2="21"/></svg>
+            Implemented offline mode for construction modules using Service Workers, keeping the app usable and data accessible during network interruptions.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="skills">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Skills</div>
+        <h2>The stack I build with</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card reveal">
+          <div class="skill-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          <h3>Languages</h3>
+          <div class="tag-row">
+            <span class="tag">JavaScript</span><span class="tag">TypeScript</span><span class="tag">Python</span><span class="tag">Java</span><span class="tag">C++</span>
+          </div>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+          <h3>Frontend</h3>
+          <div class="tag-row">
+            <span class="tag">React.js</span><span class="tag">Redux Toolkit</span><span class="tag">RTK Query</span><span class="tag">HTML5</span><span class="tag">CSS3</span><span class="tag">Bootstrap</span><span class="tag">Tailwind</span><span class="tag">Vite</span>
+          </div>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg></div>
+          <h3>Backend</h3>
+          <div class="tag-row">
+            <span class="tag">Node.js</span><span class="tag">Express.js</span><span class="tag">REST APIs</span><span class="tag">Mongoose</span><span class="tag">MongoDB</span>
+          </div>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <h3>Real-time &amp; Performance</h3>
+          <div class="tag-row">
+            <span class="tag">WebSockets</span><span class="tag">SSE</span><span class="tag">Debounce</span><span class="tag">Throttle</span><span class="tag">Virtualization</span><span class="tag">Code Splitting</span><span class="tag">Lazy Loading</span><span class="tag">Caching</span>
+          </div>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 9a15 15 0 0 1 22 0M5 13a10 10 0 0 1 14 0M8.5 17a5 5 0 0 1 7 0"/><line x1="12" y1="21" x2="12.01" y2="21"/></svg></div>
+          <h3>PWA &amp; Offline</h3>
+          <div class="tag-row">
+            <span class="tag">Service Workers</span><span class="tag">PWA</span><span class="tag">IndexedDB</span><span class="tag">Storage APIs</span><span class="tag">Offline-first</span>
+          </div>
+        </div>
+        <div class="skill-card reveal">
+          <div class="skill-icon"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg></div>
+          <h3>Tooling</h3>
+          <div class="tag-row">
+            <span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">CI/CD</span><span class="tag">GitHub Actions</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="projects">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Projects</div>
+        <h2>Things I've shipped</h2>
+        <p>A mix of production work and self-directed builds, spanning real-time tracking, offline-first tooling, and full MERN-stack systems.</p>
+      </div>
+      <div class="project-grid">
+
+        <a href="https://www.uma-uk.com/" target="_blank" rel="noopener noreferrer" class="project-card reveal">
+          <div class="project-top">
+            <h3>UMA UK</h3>
+            <svg class="project-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <p>Designed to manage fleet, field operations, projects, assets, and security workflows in one connected environment — with greater visibility, stronger coordination, and better control.</p>
+          <div class="tag-row"><span class="tag">React</span><span class="tag">Fleet Ops</span><span class="tag">Security</span></div>
+        </a>
+
+        <a href="https://dev-app-sgms.softsprint.ae/ar" target="_blank" rel="noopener noreferrer" class="project-card reveal">
+          <div class="project-top">
+            <h3>Port Gate Monitoring</h3>
+            <svg class="project-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <p>An interface for monitoring every truck entering and exiting the port, with weight details and an auto-generated invoice for payment.</p>
+          <div class="tag-row"><span class="tag">React</span><span class="tag">Real-time</span><span class="tag">Invoicing</span></div>
+        </a>
+
+        <a href="https://admin-dev-app-sgms.softsprint.ae/owners" target="_blank" rel="noopener noreferrer" class="project-card reveal">
+          <div class="project-top">
+            <h3>Port Control Panel</h3>
+            <svg class="project-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <p>System of record for the port — trucks, owners, drivers, and RFID cards — with full control over port lanes and lane changes.</p>
+          <div class="tag-row"><span class="tag">React</span><span class="tag">Admin Panel</span><span class="tag">RFID</span></div>
+        </a>
+
+        <a href="https://dev.softsprint.ae/signin" target="_blank" rel="noopener noreferrer" class="project-card reveal">
+          <div class="project-top">
+            <h3>Fleet Management &amp; Live Tracking</h3>
+            <svg class="project-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <p>Real-time vehicle and driver tracking built to improve operational efficiency, cut costs, and keep fleets safer.</p>
+          <div class="tag-row"><span class="tag">React</span><span class="tag">WebSockets</span><span class="tag">Leaflet</span></div>
+        </a>
+
+        <a href="https://dev.softsprint.ae/signin" target="_blank" rel="noopener noreferrer" class="project-card reveal">
+          <div class="project-top">
+            <h3>Construction Management System</h3>
+            <svg class="project-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <p>Role-based platform handling Inspection Requests, Snag Lists, and Submittals between contractors, QA engineers, and consultants — with offline support.</p>
+          <div class="tag-row"><span class="tag">React</span><span class="tag">Service Workers</span><span class="tag">RBAC</span></div>
+        </a>
+
+        <a href="https://joe-a11-rm.github.io/dashboard/" target="_blank" rel="noopener noreferrer" class="project-card reveal">
+          <div class="project-top">
+            <h3>Dynamic Dashboard Demo</h3>
+            <svg class="project-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <p>Drag-and-drop dashboard with customizable widget positioning, responsive layouts, and persistent state.</p>
+          <div class="tag-row"><span class="tag">React</span><span class="tag">DnD Kit</span></div>
+        </a>
+
+        <a href="https://joe-a11-rm.github.io/form-builder/" target="_blank" rel="noopener noreferrer" class="project-card reveal">
+          <div class="project-top">
+            <h3>Form Builder Demo</h3>
+            <svg class="project-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </div>
+          <p>Visual drag-and-drop form builder — add, remove, reorder, and configure fields without writing code.</p>
+          <div class="tag-row"><span class="tag">React</span><span class="tag">DnD Kit</span></div>
+        </a>
+
+        <div class="project-card no-link reveal">
+          <div class="project-top"><h3>Miracle Medical Industries</h3></div>
+          <p>Web app showcasing orthopedic medical products, with detailed listings, imagery, and specs for healthcare professionals.</p>
+          <div class="tag-row"><span class="tag">React</span><span class="tag">Bootstrap</span></div>
+        </div>
+
+        <div class="project-card no-link reveal">
+          <div class="project-top"><h3>Miracle Medical Admin Panel</h3></div>
+          <p>Admin panel built with Nest.js and MongoDB to manage and control products for Miracle Medical Industries.</p>
+          <div class="tag-row"><span class="tag">Nest.js</span><span class="tag">MongoDB</span></div>
+        </div>
+
+        <a href="https://github.com/Joe-A11-RM/Inventory-system" target="_blank" rel="noopener noreferrer" class="project-card reveal">
+          <div class="project-top">
+            <h3>Inventory System</h3>
+            <svg class="project-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </div>
+          <p>Modular backend API managing products, stock levels, categories, suppliers, and inventory movements.</p>
+          <div class="tag-row"><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">MongoDB</span></div>
+        </a>
+
+        <a href="https://github.com/Joe-A11-RM/Hotel-Reservation" target="_blank" rel="noopener noreferrer" class="project-card reveal">
+          <div class="project-top">
+            <h3>Hotel Reservation</h3>
+            <svg class="project-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </div>
+          <p>Reservation platform managing bookings, guest information, and hotel operations end to end.</p>
+          <div class="tag-row"><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">MongoDB</span></div>
+        </a>
+
+        <a href="https://github.com/Joe-A11-RM/BookStore" target="_blank" rel="noopener noreferrer" class="project-card reveal">
+          <div class="project-top">
+            <h3>Book Store</h3>
+            <svg class="project-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          </div>
+          <p>Platform for booking books, managing collections, user accounts, and order processing.</p>
+          <div class="tag-row"><span class="tag">Node.js</span><span class="tag">Express</span><span class="tag">MongoDB</span></div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="certificates">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Certifications</div>
+        <h2>Keeping the fundamentals sharp</h2>
+      </div>
+      <div class="cert-list">
+        <div class="cert-card reveal">
+          <div class="cert-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg></div>
+          <div><div class="org">Russian Cultural Center (RCC)</div><div class="course">Introduction to Web Design</div></div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg></div>
+          <div><div class="org">GOMYCODE</div><div class="course">Introduction to Node.js</div></div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg></div>
+          <div><div class="org">Coursera</div><div class="course">Meta Front-End Developer</div></div>
+        </div>
+        <div class="cert-card reveal">
+          <div class="cert-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5 17 22l-5-3-5 3 1.5-8.5"/></svg></div>
+          <div><div class="org">Route</div><div class="course">Full Stack (React &amp; Node.js)</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact-section" id="contact">
+    <div class="wrap">
+      <div class="eyebrow" style="justify-content:center;">Contact</div>
+      <h2>Let's build something that scales</h2>
+      <p>Open to frontend and full-stack opportunities. The fastest way to reach me is email — I usually reply within a day.</p>
+      <div class="contact-row">
+        <a class="contact-pill" href="mailto:yousefsherif7500@gmail.com">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+          yousefsherif7500@gmail.com
+        </a>
+        <a class="contact-pill" href="tel:+201110647154">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +20 110 647 154
+        </a>
+        <a class="contact-pill" href="#">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+        <a class="contact-pill" href="#">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>&copy; 2026 Yousef Sherif. Built with React fundamentals in mind — and plain HTML.</p>
+    <div class="footer-socials">
+      <a href="mailto:yousefsherif7500@gmail.com" aria-label="Email">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+      </a>
+      <a href="#" aria-label="LinkedIn">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="#" aria-label="GitHub">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // live clock — Cairo local time
+  function tick(){
+    const now = new Date();
+    const fmt = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Africa/Cairo', hour: '2-digit', minute:'2-digit', second:'2-digit', hour12:false
+    });
+    document.getElementById('clock').textContent = fmt.format(now);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const mobilePanel = document.getElementById('mobilePanel');
+  menuBtn.addEventListener('click', () => {
+    const open = mobilePanel.style.display === 'flex';
+    mobilePanel.style.display = open ? 'none' : 'flex';
+    menuBtn.setAttribute('aria-expanded', String(!open));
+  });
+  mobilePanel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobilePanel.style.display = 'none';
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }));
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting){
+        e.target.classList.add('is-visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
